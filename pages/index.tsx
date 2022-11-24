@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { MdVerified } from "react-icons/md";
 import { RiSendPlaneFill, RiCloseFill } from "react-icons/ri";
-import { AiFillLock, AiFillUnlock } from "react-icons/ai";
+
 import Image from "next/image";
 
 import { ToDoListContext } from "../context/ToDoListApp";
@@ -25,6 +25,7 @@ const Home = () => {
   }: any = useContext(ToDoListContext);
   useEffect(() => {
     checkIfWalletIsConnect();
+    getToDoList();
   }, []);
 
   return (
@@ -45,7 +46,7 @@ const Home = () => {
           <h2>TODO History List</h2>
           <div>
             {myList.map((val: any, index: any) => (
-              <div className={Style.home_completed_list}>
+              <div key={index} className={Style.home_completed_list}>
                 <MdVerified className={Style.iconColor} />
                 <p>{val.slice(0, 30)}...</p>
               </div>
@@ -64,7 +65,7 @@ const Home = () => {
               {currentAccouunt ? (
                 <RiSendPlaneFill
                   className={Style.iconBlack}
-                  onClick={() => toDoList()}
+                  onClick={() => toDoList(message)}
                 />
               ) : (
                 <RiSendPlaneFill
@@ -77,6 +78,7 @@ const Home = () => {
               allToDoList={allToDoList}
               allAddress={allAddress}
               myList={myList}
+              change={change}
             />
           </div>
         </div>

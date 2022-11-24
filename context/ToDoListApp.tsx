@@ -78,12 +78,13 @@ export const ToDoListProvider = ({ children }: any) => {
       getAllAddress.map(async (val: any) => {
         const getSingleData = await contract.getCreatorData(val);
         allToDoList.push(getSingleData);
-        console.log(getSingleData);
       });
 
       const allMessage = await contract.getMessage();
       setMyList(allMessage);
     } catch (error) {
+      console.log("error", error);
+
       setError("Something wrong creating list...");
     }
   };
