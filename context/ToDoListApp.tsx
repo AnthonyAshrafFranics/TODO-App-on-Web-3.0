@@ -53,9 +53,8 @@ export const ToDoListProvider = ({ children }: any) => {
       const contract = await fetchContract(signer);
 
       const createList = await contract.createList(message);
-      createList.wait();
 
-      console.log("createList", createList);
+      createList.wait();
     } catch (error) {
       setError("Something wrong creating list...");
     }
@@ -73,12 +72,15 @@ export const ToDoListProvider = ({ children }: any) => {
       // GET DATA
       const getAllAddress = await contract.getAddress();
       setAllAddress(getAllAddress);
-      console.log(getAllAddress);
+      // console.log("getAllAddress", getAllAddress);
 
-      getAllAddress.map(async (val: any) => {
-        const getSingleData = await contract.getCreatorData(val);
+      // getAllAddress.map(async (val: any) => {
+      const getSingleData = await contract.getCreatorData();
+      // console.log("getSingleData", getSingleData);
+      if (getSingleData.length !== 0) {
         allToDoList.push(getSingleData);
-      });
+      }
+      // });
 
       const allMessage = await contract.getMessage();
       setMyList(allMessage);
@@ -90,7 +92,7 @@ export const ToDoListProvider = ({ children }: any) => {
   };
 
   // Toggle function
-  const change = async (address: any) => {
+  const change = async (id: any) => {
     // connecting with smart contract
     const web3modal = new Web3Modal();
     const connection = await web3modal.connect();
@@ -98,7 +100,7 @@ export const ToDoListProvider = ({ children }: any) => {
     const signer = provider.getSigner();
     const contract = await fetchContract(signer);
 
-    const state = await contract.toggle(address);
+    const state = await contract.toggle(id);
     state.wait();
     console.log("state", state);
   };

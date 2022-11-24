@@ -3,7 +3,7 @@ pragma solidity ^0.8.9;
 
 
 contract ToDoList {
-    uint public _idUser;
+    uint public _idUser = 0;
     address public ownerOfContract;
 
     address[] public creators;
@@ -15,6 +15,7 @@ contract ToDoList {
         uint userId;
         string message;
         bool completed;
+
     }
 
     event ToDoEvent(
@@ -24,7 +25,7 @@ contract ToDoList {
         bool completed
     );
 
-    mapping(address => ToDoListApp) public toDoListApps;
+    mapping(uint => ToDoListApp) public toDoListApps;
 
     constructor() {
         ownerOfContract = msg.sender;
@@ -35,14 +36,12 @@ contract ToDoList {
     }
 
     function createList(string calldata _message) external {
-        inc();
         uint idNumber = _idUser;
-        ToDoListApp storage toDo = toDoListApps[msg.sender];
 
-        toDo.account = msg.sender;
-        toDo.message = _message;
-        toDo.completed = false;
-        toDo.userId = idNumber;
+        toDoListApps[idNumber].account = msg.sender;
+        toDoListApps[idNumber].message = _message;
+        toDoListApps[idNumber].completed = false;
+        toDoListApps[idNumber].userId = idNumber;
 
         creators.push(msg.sender);
         message.push(_message);
@@ -50,21 +49,24 @@ contract ToDoList {
 
         emit ToDoEvent(
             msg.sender,
-            toDo.userId,
+            idNumber,
             _message,
-            toDo.completed
+            false
         );
+        inc();
     }
 
-    function getCreatorData(address _address) public view returns (address, uint,string memory, bool){
-
-        ToDoListApp memory singleUserData = toDoListApps[_address];
-        return(
-            singleUserData.account,
-            singleUserData.userId,
-            singleUserData.message,
-            singleUserData.completed
-        );
+    function getCreatorData() public view returns(ToDoListApp[] memory){
+        ToDoListApp[] memory temp = new ToDoListApp[](_idUser);
+        uint count = 0;
+        for(uint i = 0; i < _idUser; i++){
+            ToDoListApp memory singleUserData = toDoListApps[i];
+            if(singleUserData.account == msg.sender){
+                temp[count] = singleUserData;
+                count++;
+            }
+        }
+        return temp;
     }
 
     function getAddress() external view returns(address[] memory){
@@ -75,8 +77,8 @@ contract ToDoList {
         return message;
     }
 
-    function toggle(address _creator) public {
-        ToDoListApp storage singleUserData = toDoListApps[_creator];
+    function toggle(uint _id) public {
+        ToDoListApp storage singleUserData = toDoListApps[_id];
         singleUserData.completed = !singleUserData.completed;
     }
 }
