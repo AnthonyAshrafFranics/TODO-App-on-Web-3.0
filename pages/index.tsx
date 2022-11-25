@@ -23,6 +23,7 @@ const Home = () => {
     myList,
     allToDoList,
   }: any = useContext(ToDoListContext);
+
   useEffect(() => {
     checkIfWalletIsConnect();
     getToDoList();

@@ -11,7 +11,7 @@ export const ToDoListContext = React.createContext();
 export const ToDoListProvider = ({ children }: any) => {
   const [currentAccouunt, setCurrentAccouunt] = useState("");
   const [error, setError] = useState("");
-  const [allToDoList, setAllToDoList] = useState([]);
+  const [allToDoList, setAllToDoList] = useState();
   const [myList, setMyList] = useState([]);
   const [allAddress, setAllAddress] = useState([]);
 
@@ -55,6 +55,7 @@ export const ToDoListProvider = ({ children }: any) => {
       const createList = await contract.createList(message);
 
       createList.wait();
+      location.reload();
     } catch (error) {
       setError("Something wrong creating list...");
     }
@@ -78,7 +79,8 @@ export const ToDoListProvider = ({ children }: any) => {
       const getSingleData = await contract.getCreatorData();
       // console.log("getSingleData", getSingleData);
       if (getSingleData.length !== 0) {
-        allToDoList.push(getSingleData);
+        // allToDoList.push(getSingleData);
+        setAllToDoList(getSingleData);
       }
       // });
 

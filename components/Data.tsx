@@ -6,14 +6,14 @@ import { ToDoListContext } from "../context/ToDoListApp";
 import Style from "../styles/index.module.css";
 
 const Data = ({ allToDoList, allAddress, myList, change }: any) => {
-  console.log("allToDoList", allToDoList);
+  // console.log("allToDoList", allToDoList);
 
   return (
     <div className={Style.home_create_list}>
-      {allToDoList.length === 0 ? (
+      {allToDoList?.length === 0 ? (
         <div className={Style.noData}>No Data</div>
       ) : (
-        allToDoList[0].map((val: any, i: any) => (
+        allToDoList?.map((val: any, i: any) => (
           <div key={i} className={Style.home_create_list_app}>
             <div className={Style.locl_list}>
               <AiFillLock className={Style.lock_color} />
