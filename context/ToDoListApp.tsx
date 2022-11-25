@@ -95,16 +95,20 @@ export const ToDoListProvider = ({ children }: any) => {
 
   // Toggle function
   const change = async (id: any) => {
-    // connecting with smart contract
-    const web3modal = new Web3Modal();
-    const connection = await web3modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
-    const contract = await fetchContract(signer);
+    try {
+      // connecting with smart contract
+      const web3modal = new Web3Modal();
+      const connection = await web3modal.connect();
+      const provider = new ethers.providers.Web3Provider(connection);
+      const signer = provider.getSigner();
+      const contract = await fetchContract(signer);
 
-    const state = await contract.toggle(id);
-    state.wait();
-    console.log("state", state);
+      const state = await contract.toggle(id);
+      state.wait();
+      console.log("state", state);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
